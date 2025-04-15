@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>自律打卡系统</title>
+  <style>
+    body {
+      font-family: "Helvetica Neue", sans-serif;
+      margin: 0;
+      padding: 2rem;
+      background-color: #f9f9f9;
+    }
+    .container {
+      max-width: 600px;
+      margin: auto;
+      background: white;
+      border-radius: 1rem;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      padding: 2rem;
+    }
+    h1 {
+      text-align: center;
+      color: #333;
+    }
+    label {
+      margin-top: 1rem;
+      display: block;
+      font-weight: bold;
+    }
+    input, select {
+      width: 100%;
+      padding: 0.6rem;
+      margin-top: 0.5rem;
+      border: 1px solid #ccc;
+      border-radius: 0.5rem;
+      font-size: 1rem;
+    }
+    button {
+      margin-top: 1.5rem;
+      width: 100%;
+      padding: 0.8rem;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 0.5rem;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+    .log {
+      margin-top: 2rem;
+      background: #eef6ff;
+      padding: 1rem;
+      border-radius: 0.5rem;
+    }
+    .log ul {
+      padding-left: 1rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>自律打卡系统</h1>
+    <label for="username">用户名（权限验证）</label>
+    <input type="text" id="username" placeholder="请输入你的用户名" />
+
+    <label for="type">打卡类型</label>
+    <select id="type">
+      <option value="运动">运动</option>
+      <option value="戒色">戒色</option>
+    </select>
+
+    <button onclick="submitCheckin()">打卡</button>
+
+    <div class="log" id="logArea">
+      <strong>打卡记录：</strong>
+      <ul id="records"></ul>
+    </div>
+
+    <div class="log">
+      <strong>统计数据：</strong>
+      <p>运动打卡次数：<span id="countWorkout">0</span></p>
+      <p>戒色打卡次数：<span id="countDiscipline">0</span></p>
+    </div>
+  </div>
+
+  <script>
+    const allowedUsers = ['祐宁', '智高'];
+    let stats = {
+      运动: 0,
+      戒色: 0
+    };
+
+    function submitCheckin() {
+      const user = document.getElementById("username").value.trim().toLowerCase();
+      const type = document.getElementById("type").value;
+
+      if (!allowedUsers.map(u => u.toLowerCase()).includes(user)) {
+        alert("您没有打卡权限。");
+        return;
+      }
+
+      const now = new Date();
+      const timeStr = now.toLocaleString();
+      const record = `${user} 打卡【${type}】 - ${timeStr}`;
+
+      const li = document.createElement("li");
+      li.textContent = record;
+      document.getElementById("records").prepend(li);
+
+      stats[type]++;
+      document.getElementById("countWorkout").textContent = stats["运动"];
+      document.getElementById("countDiscipline").textContent = stats["戒色"];
+    }
+  </script>
+</body>
+</html>
